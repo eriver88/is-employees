@@ -1,0 +1,52 @@
+<div class="container">
+  <div class="ise-login-x">
+    <div class="mb-10">
+      <img src="assets/img/ise-welcome.png" width="260" alt=""/>
+    </div>
+    <form class="ise-login-x-form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="grid gap-4 mb-6 w-64">
+        <div>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            formControlName="username"
+            class="tracking-widest rounded-lg bg-gray-100 border border-gray-300 text-gray-900 text-xs focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            placeholder="Username"
+            required
+          >
+          <ng-container  *ngIf="!username?.valid && (username?.dirty || username?.touched || submitted)">
+            <p class="mt-2 text-xs text-danger" [hidden]="!username.errors.required">Username is Required</p>
+          </ng-container>
+        </div>
+        <div>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            formControlName="password"
+            class="tracking-widest rounded-lg bg-gray-100 border border-gray-300 text-gray-900 text-xs focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            placeholder="Password"
+            required
+          >
+          <ng-container  *ngIf="!password?.valid && (password?.dirty || password?.touched || submitted)">
+            <p class="mt-2 text-xs text-danger" [hidden]="!password.errors.required">Password is Required</p>
+          </ng-container>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="rounded-lg font-semibold text-white bg-primary hover:bg-primary-h focus:ring-1 focus:outline-none focus:ring-blue-300 text-xs w-full px-5 py-2.5 text-center tracking-widest"
+      >
+        Login
+      </button>
+    </form>
+
+    <div class="mt-8 text-xs">
+      <span>Created by&nbsp;</span>
+      <a href="https://github.com/eriver88" class="font-semibold">Me</a>
+    </div>
+  </div>
+
+</div>

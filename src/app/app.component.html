@@ -1,3 +1,14 @@
-<div class="container">
-  <router-outlet />
+<div class="container h-full">
+  <div class="w-full bg-gray-300 fixed z-50" *ngIf="bcStatus">
+    <div class="flex flex-row justify-between">
+      <app-breadcrumbs />
+      <div class="flex flex-row-reverse items-center px-4">
+        <a class="text-primary text-xs" href="#" (click)="logout();$event.preventDefault()">Log Out</a>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <router-outlet />
+  </div>
 </div>

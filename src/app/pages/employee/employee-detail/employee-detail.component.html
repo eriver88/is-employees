@@ -1,1 +1,227 @@
-<p>employee-detail works!</p>
+<div class="container flex justify-center items-center">
+  <!--  <app-modal #modal></app-modal>-->
+  <div class="w-[600px] flex flex-col justify-center items-center pt-16 p-2">
+    <div class="w-full mb-3 py-2 px-10">
+      <h1 class="text-primary">Employee Detail</h1>
+      <small class="text-secondary">Detail your employee</small>
+    </div>
+    <form class="w-full py-3 px-10 flex flex-col gap-4" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="flex flex-col lg:flex-row md:flex-row gap-4 pb-4">
+        <div class="flex flex-col gap-4 w-full">
+          <div>
+            <label class=" text-xs" for="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              formControlName="username"
+              class=" tracking-wider rounded-lg bg-gray-100 border border-gray-300 text-gray-900 text-xs focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              required
+            >
+            <ng-container *ngIf="!username?.valid && (username?.dirty || username?.touched || submitted)">
+              <p class="mt-2 text-xs text-danger" [hidden]="!username.errors.required">Username is Required</p>
+            </ng-container>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class=" text-xs" for="firstName">First Name</label>
+              <input
+                type="text"
+                id="firstName"
+                formControlName="firstName"
+                class=" tracking-wider rounded-lg bg-gray-100 border border-gray-300 text-gray-900 text-xs focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                required
+              >
+              <ng-container *ngIf="!firstName?.valid && (firstName?.dirty || firstName?.touched || submitted)">
+                <p class="mt-2 text-xs text-danger" [hidden]="!firstName.errors.required">First Name is Required</p>
+              </ng-container>
+            </div>
+            <div>
+              <label class=" text-xs" for="lastName">Last Name</label>
+              <input
+                type="text"
+                id="lastName"
+                formControlName="lastName"
+                class=" tracking-wider rounded-lg bg-gray-100 border border-gray-300 text-gray-900 text-xs focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                required
+              >
+              <ng-container *ngIf="!lastName?.valid && (lastName?.dirty || lastName?.touched || submitted)">
+                <p class="mt-2 text-xs text-danger" [hidden]="!lastName.errors.required">Last Name is Required</p>
+              </ng-container>
+            </div>
+          </div>
+          <div>
+            <label class=" text-xs" for="email">Email</label>
+            <input
+              type="text"
+              id="email"
+              formControlName="email"
+              class="tracking-wider rounded-lg bg-gray-100 border border-gray-300 text-gray-900 text-xs focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              placeholder="example@mail.com"
+              required
+            >
+            <ng-container *ngIf="!email?.valid && (email?.dirty || email?.touched || submitted)">
+              <p class="mt-2 text-xs text-danger" [hidden]="!email.errors.required">Email is Required</p>
+            </ng-container>
+            <ng-container *ngIf="!email?.valid && (email?.dirty || email?.touched || submitted)">
+              <p class="mt-2 text-xs text-danger" [hidden]="!email.errors.email">Email Invalid</p>
+            </ng-container>
+          </div>
+          <div class="grid grid-cols-1">
+            <label class=" text-xs" for="birthDate">Birt Of Date</label>
+            <div class="relative w-full">
+              <input *ngIf="isUpdate"
+                formControlName="birthDate"
+                type="date"
+                placeholder="dd/mm/yyyy"
+                class="rounded-lg bg-gray-100 border border-gray-300 text-gray-900 text-xs focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+              <input *ngIf="!isUpdate"
+                formControlName="birthDate"
+                type="textg"
+                placeholder="dd/mm/yyyy"
+                class="rounded-lg bg-gray-100 border border-gray-300 text-gray-900 text-xs focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+            </div>
+            <ng-container *ngIf="!birthDate?.valid && (birthDate?.dirty || birthDate?.touched || submitted)">
+              <p class="mt-2 text-xs text-danger" [hidden]="!birthDate.errors.required">Birth Of Date is Required</p>
+            </ng-container>
+            <ng-container *ngIf="birthDateError || submitted">
+              <p class="mt-2 text-xs text-danger" [hidden]="!birthDateError">Birth Of Date Not More Than Today</p>
+            </ng-container>
+          </div>
+        </div>
+        <div class="flex flex-col gap-4 w-full">
+          <div>
+            <label class=" text-xs" for="basicSalary">Basic Salary</label>
+            <div class="relative w-full">
+              <div class="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none">
+                <svg class="w-4 h-4 text-gray-500" aria-hidden="true"
+                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M5 2a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1M2 5h12a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"/>
+                </svg>
+              </div>
+              <input
+                *ngIf="isUpdate"
+                formControlName="basicSalary"
+                type="number"
+                aria-describedby="helper-text-explanation"
+                class="indent-7 tracking-wider rounded-lg bg-gray-100 border border-gray-300 text-gray-900 text-xs focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="0"
+                minlength="1"
+                required
+              />
+              <input
+                *ngIf="!isUpdate"
+                formControlName="basicSalary"
+                type="text"
+                aria-describedby="helper-text-explanation"
+                class="indent-7 tracking-wider rounded-lg bg-gray-100 border border-gray-300 text-gray-900 text-xs focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              />
+            </div>
+            <ng-container *ngIf="!basicSalary?.valid && (basicSalary?.dirty || basicSalary?.touched || submitted)">
+              <p class="mt-2 text-xs text-danger" [hidden]="!basicSalary.errors.required">Basic Salary is Required</p>
+            </ng-container>
+            <ng-container *ngIf="!basicSalary?.valid && (basicSalary?.dirty || basicSalary?.touched || submitted)">
+              <p class="mt-2 text-xs text-danger"
+                 [hidden]="(basicSalary.errors?.minlength?.requiredLength < basicSalary.errors?.minlength?.actualLength)">
+                Basic Salary is Not Minimum</p>
+            </ng-container>
+          </div>
+
+          <div>
+            <label class=" text-xs" for="group">Group</label>
+            <select
+              id="group"
+              formControlName="group"
+              class=" text-xs bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+              <option selected>Choose a Group</option>
+              <option>Marketing</option>
+              <option>Training</option>
+              <option>Sales</option>
+              <option>Human Resources</option>
+              <option>Product Management</option>
+              <option>Accounting</option>
+              <option>Support</option>
+              <option>Engineering</option>
+              <option>Research and Development</option>
+              <option>Product Management</option>
+              <option>Services</option>
+              <option>Business Development</option>
+              <option>Legal</option>
+            </select>
+            <ng-container *ngIf="!group?.valid && (group?.dirty || group?.touched || submitted)">
+              <p class="mt-2 text-xs text-danger" [hidden]="!group.errors.required">Group is Required</p>
+            </ng-container>
+          </div>
+
+          <div>
+            <label class=" text-xs" for="description">Description</label>
+            <textarea
+              id="description"
+              formControlName="description"
+              rows="4"
+              class="block p-2.5 w-full text-sm text-gray-900 bg-gray-100 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"></textarea>
+            <ng-container *ngIf="!description?.valid && (description?.dirty || description?.touched || submitted)">
+              <p class="mt-2 text-xs text-danger" [hidden]="!description.errors.required">Description is Required</p>
+            </ng-container>
+          </div>
+
+          <div>
+            <label class=" text-xs" for="status">Status</label>
+            <select
+              id="status"
+              formControlName="status"
+              class=" text-xs bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+              <option selected>Choose a Status</option>
+              <option value="active">Active</option>
+              <option value="inactive">In Active</option>
+            </select>
+            <ng-container *ngIf="!status?.valid && (status?.dirty || status?.touched || submitted)">
+              <p class="mt-2 text-xs text-danger" [hidden]="!status.errors.required">Status is Required</p>
+            </ng-container>
+          </div>
+
+
+        </div>
+      </div>
+
+      <div class="flex flex-row-reverse gap-2" *ngIf="!isUpdate">
+        <button
+          (click)="back()"
+          type="button"
+          class="inline-flex w-30 rounded-lg font-semibold text-white  bg-primary hover:bg-primary-h focus:ring-1 focus:outline-none focus:ring-blue-500 text-xs px-5 py-2.5 text-center tracking-wider"
+        >
+          <svg class="w-4 h-4 me-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+               stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+          </svg>
+
+          <span>OK</span>
+        </button>
+      </div>
+
+      <div class="flex flex-row-reverse gap-2" *ngIf="isUpdate">
+        <button
+          (click)="submit()"
+          type="button"
+          class="inline-flex w-30 rounded-lg font-semibold text-white bg-primary hover:bg-primary-h focus:ring-1 focus:outline-none focus:ring-blue-500 text-xs px-5 py-2.5 text-center tracking-wider"
+        >
+          <svg class="w-4 h-4 me-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+               stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+          </svg>
+
+          <span>Save</span>
+        </button>
+        <button
+          (click)="back()"
+          type="button"
+          class="inline-flex w-30 rounded-lg font-semibold text-white  bg-warning hover:bg-warning-h focus:ring-1 focus:outline-none focus:ring-blue-500 text-xs px-5 py-2.5 text-center tracking-wider"
+        >
+          <span>Cancel</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

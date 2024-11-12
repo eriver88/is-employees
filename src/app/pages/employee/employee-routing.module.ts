@@ -6,9 +6,40 @@ import { EmployeeAddComponent } from './employee-add/employee-add.component';
 import { EmployeeDetailComponent } from './employee-detail/employee-detail.component';
 
 const routes: Routes = [
-  { path: '', component: EmployeeComponent },
-  { path: 'add', component: EmployeeAddComponent },
-  { path: 'detail/:id', component: EmployeeDetailComponent }
+  {
+    path: '',
+    component: EmployeeComponent,
+    data: {
+      navigation: true,
+      breadcrumbs: 'Employee'
+    }
+  },
+  {
+    path: 'add',
+    component: EmployeeAddComponent,
+    data: {
+      navigation: true,
+      breadcrumbs: 'Employee Add'
+    }
+  },
+  {
+    path: 'detail/:id',
+    component: EmployeeDetailComponent,
+    data: {
+      navigation: true,
+      breadcrumbs: 'Employee Detail',
+      disable: true
+    }
+  },
+  {
+    path: 'edit/:id',
+    component: EmployeeDetailComponent,
+    data: {
+      navigation: true,
+      breadcrumbs: 'Employee Edit',
+      disable: false
+    }
+  }
 ];
 
 @NgModule({

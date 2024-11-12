@@ -1,0 +1,179 @@
+<section class="ise-dt">
+  <div class="mx-auto max-w-screen-xl px-8">
+
+    <div class="py-6">
+      <ng-content></ng-content>
+    </div>
+
+    <div class="bg-white relative shadow-md sm:rounded-lg">
+      <div class="overflow-x-auto mb-40 lg:mb-0 md:mb-0 sm:mb-0">
+        <table class="w-full text-xs text-left text-gray-500">
+          <thead class="text-xs text-primary bg-gray-200">
+          <tr>
+            <ng-container *ngFor="let column of options.columns">
+              <th scope="col" class="text-xs px-4 py-3">
+                  <span class="flex items-center text-xs justify-between">
+                    {{ column.label }}
+                    <button (click)="eventPgSort(column.field)">
+                      <svg *ngIf="(column.sorting && column.sortNumber === 1)" class="w-2 h-2 ms-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="4"
+                           stroke="currentColor" width="24" height="24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5"/>
+                      </svg>
+
+                      <svg *ngIf="(column.sorting && column.sortNumber === 2)" class="w-2 h-2 ms-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="4"
+                           stroke="currentColor" width="24" height="24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                      </svg>
+
+                      <svg *ngIf="(column.sorting && !column.sortNumber)" class="w-4 h-4 ms-1" aria-hidden="true"
+                           xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
+                      </svg>
+                    </button>
+                </span>
+              </th>
+            </ng-container>
+          </tr>
+          </thead>
+
+          <!-- content -->
+          <tbody>
+          <ng-container *ngIf="rows.length">
+            <ng-container *ngFor="let data of rows">
+              <tr class="border-b hover:bg-gray-100 cursor-pointer">
+                <ng-container *ngFor="let column of options.columns">
+                  <ng-container *ngIf="column.type === 'string' || column.type === 'number'">
+                    <td class="text-xs px-4 py-3" (click)="eventRow(data)">
+                      {{ data[column.field] }}
+                    </td>
+                  </ng-container>
+                  <ng-container *ngIf="column.type !== 'string'">
+                    <ng-container *ngIf="column.type !== 'number'">
+                      <ng-container [ngSwitch]="column.type">
+                        <ng-container *ngSwitchCase="'element'">
+                          <td class="text-xs px-4 py-3">
+                            <div class="flex flex-row gap-1">
+                              <ng-container *ngFor="let x of column.ref">
+                                <ng-container *ngIf="x.type === 'button'">
+                                  <button [class]="x.className" type="button" (click)="x.act(data[column.field])">
+                                    {{x.name}}
+                                  </button>
+                                </ng-container>
+                                <ng-container *ngIf="x.type === 'badge'">
+                                  <div>
+                                  <span [class]="x.className[data[column.field]]">
+                                   {{x.act(data[column.field])}}
+                                  </span>
+                                  </div>
+                                </ng-container>
+                              </ng-container>
+                            </div>
+                          </td>
+                        </ng-container>
+                        <ng-container *ngSwitchDefault>
+                          <td class="text-xs px-4 py-3" scope="col" class="text-xs px-4 py-3">
+                            {{ transformField(column.type, data[column.field]) }}
+                          </td>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </tr>
+            </ng-container>
+          </ng-container>
+
+          <ng-container *ngIf="!rows.length">
+            <tr class="border-b hover:bg-gray-100 cursor-pointer">
+              <td class="text-xs px-4 py-4 text-center italic" [colSpan]="options.columns.length">
+                Data Not Found
+              </td>
+            </tr>
+          </ng-container>
+          </tbody>
+
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- table navigation -->
+  <div
+    class="bg-primary-h lg:bg-white md:bg-white sm:bg-white px-8 w-full z-50 fixed bottom-0 lg:relative md:relative sm:relative flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
+    aria-label="Table navigation">
+
+    <!-- pagination info -->
+    <div class="text-xs font-normal text-white lg:text-primary md:text-primary sm:text-primary w-40">
+      <span class="font-semibold text-white lg:text-primary md:text-primary sm:text-primary">{{currentPage + 1}}
+        - {{perPage}}</span>
+      of
+      <span class="font-semibold text-white lg:text-primary md:text-primary sm:text-primary">
+        {{ options.data.length }}
+      </span>
+    </div>
+
+    <!-- pagination -->
+    <div class="flex flex-col justify-center items-center w-full">
+      <ul class="ise-dt-pagination">
+        <li>
+          <a
+            href="#"
+            (click)="eventPgMove(page, 'previous');$event.preventDefault()"
+            class="flex items-center justify-center h-full py-1.5 px-1.5 ml-0 text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700 rounded-full">
+            <span class="sr-only">Previous</span>
+            <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                    clip-rule="evenodd"/>
+            </svg>
+          </a>
+        </li>
+        <ng-container *ngFor="let item of [].constructor(this.perPage);let i = index">
+          <li *ngIf="currentPage !== i">
+            <a
+              href="#"
+              (click)="eventPgMove(i);$event.preventDefault()"
+              class="flex items-center justify-center text-xs py-2 px-3 leading-tight text-gray-500 bg-white hover:bg-gray-100 rounded-full">{{ i + 1 }}</a>
+          </li>
+          <li *ngIf="currentPage === i">
+            <a
+              href="#"
+              (click)="eventPgMove(i);$event.preventDefault()"
+              class="flex items-center justify-center text-xs py-2 px-3 leading-tight bg-primary-h text-white rounded-full">{{ i + 1 }}</a>
+          </li>
+        </ng-container>
+        <li>
+          <a
+            href="#"
+            (click)="eventPgMove(page, 'next');$event.preventDefault()"
+            class="flex items-center justify-center h-full py-1.5 px-1.5 leading-tight text-primary bg-white hover:bg-gray-100 hover:text-gray-700 rounded-full">
+            <span class="sr-only">Next</span>
+            <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                    clip-rule="evenodd"/>
+            </svg>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <!-- pagination -->
+
+    <div class="w-full lg:w-20 md:w-20">
+      <select
+        id="pg-paging"
+        #pgPaging
+        (change)="eventPgPage(pgPaging.value)"
+        class="text-xs bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4">
+        <option [value]="20" selected>20</option>
+        <option [value]="40">40</option>
+        <option [value]="80">80</option>
+        <option [value]="100">100</option>
+      </select>
+    </div>
+
+  </div>
+</section>
