@@ -191,24 +191,65 @@ export class EmployeeComponent {
           ...this.options,
           data: items.filter((item: Employee) => {
 
-            return (
-              (!item.username.search(search) ||
-                !item.firstName.search(search) ||
-                !item.lastName.search(search) ||
-                !item.email.search(search) ||
-                !item.group.search(search)) && (
-                (salaryTo || salaryFrom ? !(item.basicSalary > salaryTo) && !(item.basicSalary <= salaryFrom) : true)
+            if (Boolean(search) && Boolean(salaryFrom) && Boolean(salaryTo)) {
+
+              return (
+                (!item.username.search(search) ||
+                  !item.firstName.search(search) ||
+                  !item.lastName.search(search) ||
+                  !item.email.search(search) ||
+                  !item.group.search(search)) && (
+                    (salaryFrom <= item.basicSalary) && (salaryTo >= item.basicSalary))
               )
-            )
+            } else if (Boolean(search) && Boolean(salaryFrom)) {
+              return (
+                (!item.username.search(search) ||
+                  !item.firstName.search(search) ||
+                  !item.lastName.search(search) ||
+                  !item.email.search(search) ||
+                  !item.group.search(search)) &&
+                  (!(salaryFrom >= item.basicSalary) && (salaryFrom <= item.basicSalary))
+              )
+            } else if (Boolean(search) && Boolean(salaryTo)) {
+              return (
+                (!item.username.search(search) ||
+                  !item.firstName.search(search) ||
+                  !item.lastName.search(search) ||
+                  !item.email.search(search) ||
+                  !item.group.search(search)) &&
+                  (!(salaryTo <= item.basicSalary) && (salaryTo >= item.basicSalary))
+              )
+            } else if (Boolean(search)) {
+              return (
+                (!item.username.search(search) ||
+                  !item.firstName.search(search) ||
+                  !item.lastName.search(search) ||
+                  !item.email.search(search) ||
+                  !item.group.search(search))
+              )
+            } else if (Boolean(salaryFrom) && Boolean(salaryTo)) {
+              return (
+                (
+                  (salaryFrom <= item.basicSalary) && (salaryTo >= item.basicSalary)
+                )
+              )
+            } else if (Boolean(salaryFrom)) {
+              return (
+                (
+                  !(salaryFrom >= item.basicSalary) && (salaryFrom <= item.basicSalary)
+                )
+              )
+            } else if (Boolean(salaryTo)) {
+              return (
+                (
+                  !(salaryTo <= item.basicSalary) && (salaryTo >= item.basicSalary)
+                )
+              )
+            } else {
+              return true;
+            }
           })
         }
-
-      } else {
-
-        this.options = {
-          ...this.options,
-          data: items
-        };
 
       }
     });

@@ -5,9 +5,7 @@ import {
   OnChanges,
   OnInit,
   Output,
-  SimpleChanges,
-  TemplateRef,
-  ViewChild, ViewContainerRef
+  SimpleChanges
 } from '@angular/core';
 import {DtOptions} from './interfaces/datatables';
 import {_currency} from '../../_helpers/utils';
@@ -33,7 +31,6 @@ export class DatatablesComponent implements OnInit, OnChanges {
   sort: any;
 
   constructor(
-    private viewContainerRef: ViewContainerRef
   ) {
   }
 
